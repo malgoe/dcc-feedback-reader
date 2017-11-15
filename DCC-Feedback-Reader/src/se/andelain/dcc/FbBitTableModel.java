@@ -88,11 +88,13 @@ public class FbBitTableModel extends AbstractTableModel{
             }
         }
         //If it didn't exist, add it
+        System.out.println("Addr: "+addr);
         addFbBit(new FbBit(addr,bit,status));
     }
     public void addFbBit(FbBit fbBit) {
         fbBits.add(fbBit);
-        fireTableRowsInserted(getRowCount(), getRowCount());
+        System.out.println("RowCount: "+getRowCount());
+        fireTableRowsInserted(getRowCount()-1, getRowCount()-1);
     }
 
     public void setValueAt(Object value, int row, int col) {
