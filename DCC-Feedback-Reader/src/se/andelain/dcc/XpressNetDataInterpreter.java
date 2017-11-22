@@ -99,7 +99,7 @@ public class XpressNetDataInterpreter implements Runnable {
 			}
 
 			//Loop through 4 bit statuses
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j <= 3; j++) {
 				if(getBit(msg[i], j) == 1) {
 					bitStatus[j] = true;
 				} else {
@@ -109,7 +109,7 @@ public class XpressNetDataInterpreter implements Runnable {
 			
 			//Put received data into feedbackinfo
 			try {
-				for(int j = 0; j < 3; j++) {
+				for(int j = 0; j <= 3; j++) {
 					feedbackInfo.put(new Object[]{decoderAddr,bitNum[j],bitStatus[j]});
 				}
 			} catch (InterruptedException e) {

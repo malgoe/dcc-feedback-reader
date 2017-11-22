@@ -1,13 +1,14 @@
 package se.andelain.dcc;
 
 import javax.swing.table.AbstractTableModel;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Custom Table Model for presenting FbBit objects in a JTable.
  */
-public class FbBitTableModel extends AbstractTableModel{
+public class FbBitTableModel extends AbstractTableModel implements Serializable{
 
     private List<FbBit> fbBits;
 
@@ -17,6 +18,15 @@ public class FbBitTableModel extends AbstractTableModel{
 
     public FbBitTableModel(){
         this.fbBits = new ArrayList<FbBit>();
+    }
+
+    public List<FbBit> getFbBits(){
+        return fbBits;
+    }
+
+    public void setFbBits(List<FbBit> fbBits){
+        this.fbBits = fbBits;
+        fireTableDataChanged();
     }
 
     @Override
@@ -32,6 +42,8 @@ public class FbBitTableModel extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object value = "unknown";
+        //System.out.println("Attempted to get row: " + rowIndex + " column: "+ columnIndex);
+        //System.out.println("fBbits.size: "+fbBits.size());
         FbBit fbBit = fbBits.get(rowIndex);
         switch(columnIndex){
             case 0:

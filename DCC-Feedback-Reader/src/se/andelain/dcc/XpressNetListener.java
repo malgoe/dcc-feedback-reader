@@ -37,7 +37,7 @@ public class XpressNetListener implements Runnable {
 		try {
 			skt = new Socket(ip, port);
 			skt.setSoTimeout(1000);
-			System.out.println("Opened socket");
+			//System.out.println("Opened socket");
 
 			stream = skt.getInputStream();
 			byte[] data;
@@ -55,10 +55,10 @@ public class XpressNetListener implements Runnable {
 
 					// Put it in the queue
 					queue.put(compactData);
-					System.out.println("MSG received!");
+					//System.out.println("MSG received!");
 
 				} catch (SocketTimeoutException e) {
-					System.out.print(".");
+					//System.out.print(".");
 				}
 
 				// Check if we've been interrupted

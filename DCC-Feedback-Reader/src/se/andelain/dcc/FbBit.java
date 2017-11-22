@@ -1,6 +1,8 @@
 package se.andelain.dcc;
 
-public class FbBit {
+import java.io.Serializable;
+
+public class FbBit implements Serializable{
     private int addr;
     private int bit;
     private boolean status;
