@@ -7,6 +7,7 @@ public class FbBit implements Serializable{
     private int bit;
     private boolean status;
     private String name;
+    private String busName;
     /**
      * Contains the number of status changes that have been logged to this FbBit object.
      */
@@ -17,11 +18,13 @@ public class FbBit implements Serializable{
      * A feedback bit always has an address, a bit number and a status.
      * The combination of address and bit number should always be unique to a single FbBit object.
      * If the bit FbBit status is unknown it is recommended to set it to 0/false for consistency.
-     * @param addr
-     * @param bit
-     * @param status
+     * @param busName - Name of source bus
+     * @param addr - Address on source bus
+     * @param bit - Bit number of decoder
+     * @param status - 0 (off) / 1 (on)
      */
-    public FbBit(int addr, int bit, boolean status){
+    public FbBit(String busName, int addr, int bit, boolean status){
+        this.busName = busName;
         this.addr = addr;
         this.bit = bit;
         this.status = status;
@@ -54,6 +57,8 @@ public class FbBit implements Serializable{
             changes++;
         }
     }
+
+    public  String getBusName() { return busName; }
 
     public String getName() {
         return name;

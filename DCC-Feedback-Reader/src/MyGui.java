@@ -27,7 +27,7 @@ public class MyGui {
     private JLabel busIPFieldLabel;
     private Timer timer1;
     protected Thread[] listeners;
-    static LinkedBlockingQueue<byte[]> incomingMsgQueue = new LinkedBlockingQueue<>();
+    static LinkedBlockingQueue<Object[]> incomingMsgQueue = new LinkedBlockingQueue<>();
     static LinkedBlockingQueue<Object[]> feedbackInfo = new LinkedBlockingQueue<>();
     private final JFileChooser fc = new JFileChooser();
     private XpressNetListenerTableModel busListenerModel;
@@ -42,7 +42,7 @@ public class MyGui {
                 // Start the listeners
                 listeners = new Thread[busListenerModel.getRowCount()];
                 for(int i = 0; i < listeners.length; i++){
-                    listeners[i] = new Thread(new XpressNetListener((String)busListenerModel.getValueAt(i,1), 5550, 512, incomingMsgQueue));
+                    listeners[i] = new Thread(new XpressNetListener((String)busListenerModel.getValueAt(i,0), (String)busListenerModel.getValueAt(i,1), 5550, 512, incomingMsgQueue));
                     listeners[i].start();
                 }
 
@@ -131,7 +131,7 @@ public class MyGui {
                 //busListenerModel.addBusListener("FB1","192.168.202.11",true);
                 //busListenerModel.addBusListener("FB2","192.168.202.12",true);
 
-                    busListenerModel.addBusListener(busNameField.getText(),busIPField.getText(),true);
+                    busListenerModel.addBusListener(busNameField.getText(),busIPField.getText(),true, "");
 
             }
         });
@@ -220,11 +220,14 @@ public class MyGui {
                while(true){
                    Object[] data = feedbackInfo.poll();
                    if (data == null){
-                       msgSecLabel.setText("Msgs received/sec: "+msgSec);
+                       msgSecLabel.setText("Total msgs received/sec: "+msgSec);
                        break;
                    } else {
                        msgSec++;
-                       fbBitTableModel.updateFbBit((int)data[0], (int)data[1], (boolean)data[2]);
+                       fbBitTableModel.updateFbBit((String)data[0],(int)data[1], (int)data[2], (boolean)data[3]);
+
+                       //TODO: Implement proper counter for each listener. (msgSec)
+                       busListenerModel.updateBusListenerUpdateData((String)data[0],msgSec);
                    }
                }
 

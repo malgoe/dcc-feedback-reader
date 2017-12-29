@@ -21,12 +21,14 @@ public class XpressNetListener implements Runnable {
 	private Socket skt;
 	private InputStream stream;
 	private String ip;
-	private LinkedBlockingQueue<byte[]> queue;
+	private String busName;
+	private LinkedBlockingQueue<Object[]> queue;
 	private int port;
 	private int bufSize;
 	private boolean notStopped = true;
 
-	public XpressNetListener(String ip, int port, int bufSize, LinkedBlockingQueue<byte[]> queue) {
+	public XpressNetListener(String busName, String ip, int port, int bufSize, LinkedBlockingQueue<Object[]> queue) {
+		this.busName = busName;
 		this.ip = ip;
 		this.queue = queue;
 		this.port = port;
@@ -41,6 +43,7 @@ public class XpressNetListener implements Runnable {
 
 			stream = skt.getInputStream();
 			byte[] data;
+			byte[] compactData;
 			int count;
 
 			while (notStopped) {
@@ -50,11 +53,11 @@ public class XpressNetListener implements Runnable {
 					count = stream.read(data);
 
 					// Compact it
-					byte[] compactData = new byte[count];
+					compactData = new byte[count];
 					System.arraycopy(data, 0, compactData, 0, count);
 
 					// Put it in the queue
-					queue.put(compactData);
+					queue.put(new Object[]{busName,compactData});
 					//System.out.println("MSG received!");
 
 				} catch (SocketTimeoutException e) {

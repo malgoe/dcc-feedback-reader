@@ -14,10 +14,10 @@ public class XpressNetListenerTableModel extends AbstractTableModel implements S
     public XpressNetListenerTableModel(){
 
         this.data = new ArrayList<Object[]>();
-        this.columnNames = new String[]{"Bus name","IP", "Enabled"};
+        this.columnNames = new String[]{"Bus name","IP", "Enabled", "Updates/s"};
     }
 
-    public void addBusListener(String busName, String ipAddr, boolean enabled){
+    public void addBusListener(String busName, String ipAddr, boolean enabled, String updates){
         //Check so that the ip addr is unique
         for(Object[] arr : data){
             if(ipAddr.compareTo((String) arr[1]) == 0){
@@ -26,8 +26,21 @@ public class XpressNetListenerTableModel extends AbstractTableModel implements S
                 return;
             }
         }
-        data.add(new Object[]{busName,ipAddr,enabled});
+        data.add(new Object[]{busName,ipAddr,enabled,updates});
         fireTableRowsInserted(getRowCount()-1, getRowCount()-1);
+    }
+
+    public void updateBusListenerUpdateData(String busName, int updates){
+        //Check if it exists
+        for(Object[] arr : data){
+            if(busName.compareTo((String)arr[0]) == 0){
+                arr[3] = updates;
+                fireTableCellUpdated(data.indexOf(arr),3);
+                return;
+            }
+        }
+        System.out.println("ERROR: Someone tried to update bus data for non existing bus: "+busName);
+
     }
 
     @Override
@@ -67,10 +80,10 @@ public class XpressNetListenerTableModel extends AbstractTableModel implements S
 
     public void setValueAt(Object value, int row, int col){
 
-        if(col == 2 && value.getClass() == Boolean.class) {
-
+        if((col == 2 && value.getClass() == Boolean.class) || (col == 3 && value.getClass() == String.class)) {
             (data.get(row))[col] = value;
             fireTableCellUpdated(row, col);
         }
+
     }
 }

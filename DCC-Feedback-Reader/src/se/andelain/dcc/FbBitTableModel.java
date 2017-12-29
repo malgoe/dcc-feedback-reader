@@ -36,7 +36,7 @@ public class FbBitTableModel extends AbstractTableModel implements Serializable{
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -47,18 +47,21 @@ public class FbBitTableModel extends AbstractTableModel implements Serializable{
         FbBit fbBit = fbBits.get(rowIndex);
         switch(columnIndex){
             case 0:
-                value = fbBit.getAddr();
+                value = fbBit.getBusName();
                 break;
             case 1:
-                value = fbBit.getBit();
+                value = fbBit.getAddr();
                 break;
             case 2:
-                value = fbBit.getName();
+                value = fbBit.getBit();
                 break;
             case 3:
-                value = fbBit.getStatus();
+                value = fbBit.getName();
                 break;
             case 4:
+                value = fbBit.getStatus();
+                break;
+            case 5:
                 value = fbBit.getChanges();
                 break;
         }
@@ -82,17 +85,17 @@ public class FbBitTableModel extends AbstractTableModel implements Serializable{
     public boolean isCellEditable(int row, int col) {
         //Note that the data/cell address is constant,
         //no matter where the cell appears onscreen.
-        if (col == 2) {
+        if (col == 3) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void updateFbBit(int addr, int bit, boolean status){
+    public void updateFbBit(String busName, int addr, int bit, boolean status){
         //Check if it already exists!
         for(FbBit fb : fbBits){
-            if(fb.getAddr() == addr && fb.getBit() == bit){
+            if(fb.getBusName().compareTo(busName) == 0 && fb.getAddr() == addr && fb.getBit() == bit){
                 fb.setStatus(status);
                 fireTableCellUpdated(fbBits.indexOf(fb),3);
                 fireTableCellUpdated(fbBits.indexOf(fb),4);
@@ -101,7 +104,7 @@ public class FbBitTableModel extends AbstractTableModel implements Serializable{
         }
         //If it didn't exist, add it
         System.out.println("Addr: "+addr);
-        addFbBit(new FbBit(addr,bit,status));
+        addFbBit(new FbBit(busName, addr,bit,status));
     }
     public void addFbBit(FbBit fbBit) {
         fbBits.add(fbBit);
@@ -110,7 +113,7 @@ public class FbBitTableModel extends AbstractTableModel implements Serializable{
     }
 
     public void setValueAt(Object value, int row, int col) {
-        if(col == 2 && value.getClass() == String.class) {
+        if(col == 3 && value.getClass() == String.class) {
             fbBits.get(row).setName((String) value);
             fireTableCellUpdated(row, col);
         }
@@ -120,14 +123,16 @@ public class FbBitTableModel extends AbstractTableModel implements Serializable{
     public String getColumnName(int column) {
         switch (column){
             case 0:
-                return "Addr";
+                return "Bus";
             case 1:
-                return "Bit";
+                return "Addr";
             case 2:
-                return "Name";
+                return "Bit";
             case 3:
-                return "Status";
+                return "Name";
             case 4:
+                return "Status";
+            case 5:
                 return "Changes";
             default:
                 return null;
