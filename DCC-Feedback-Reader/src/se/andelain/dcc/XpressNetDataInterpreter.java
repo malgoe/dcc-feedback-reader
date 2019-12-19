@@ -218,8 +218,11 @@ public class XpressNetDataInterpreter implements Runnable {
 	private void printMsgBytes(String busName, byte[] msg){
         System.out.println("RAW MSG DATA from bus: "+busName);
         System.out.println("(hex): ");
+        /*
+        Deprecated in newer java versions.
+        TODO: Find a replacement for javax.xml.bind.DatatypeConverter.printHexBinary(msg));
         System.out.println(javax.xml.bind.DatatypeConverter.printHexBinary(msg));
-
+        */
         System.out.println("(bin): ");
         for (byte b : msg) {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
